@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
   <meta charset="UTF-8">
-  <title>🎉 Fun Reading Speed Game</title>
+  <title>📚 வாசிப்பு வேகம்</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
@@ -125,24 +125,24 @@
 </head>
 <body onclick="goFullscreen()" onkeydown="goFullscreen()">
   <div id="overlay" onclick="startExperience()">
-    👆 <span class="sticker">🎤</span><br>
-    Tap anywhere to start your reading speed challenge!<br>
-    <span class="sticker">📚✨</span>
+    👆 <span class="sticker">📣</span><br>
+    தொடுங்கள்! உங்கள் வாசிப்பு வேக விளையாட்டை தொடங்குங்கள்<br>
+    <span class="sticker">✨🎤📖</span>
   </div>
 
   <div class="container animate__animated animate__fadeInDown">
-    <h2>🚀 Fun Reading Speed Game <span class="sticker">🧠</span></h2>
+    <h2>📚 வாசிப்பு வேக சோதனை <span class="sticker">⚡</span></h2>
 
-    <p><strong>🎤 Read this aloud:</strong></p>
+    <p><strong>🎤 இதை ஒலியாக வாசிக்கவும்:</strong></p>
     <p id="originalText">
-      Today, science is growing fast with smart and new ideas. Solar panels now turn sunlight into power for homes and cars. Electric vehicles help reduce air pollution and run without petrol. Robots are used in hospitals to help doctors during surgeries. Drones can fly and take photos or deliver packages.
+      இன்று அறிவியல் வேகமாக வளர்ந்து வருகிறது. சூரிய பலகைகள் சூரிய ஒளியை மின்சக்தியாக மாற்றுகின்றன. மின்சார வாகனங்கள் மாசுபாட்டைக் குறைத்து பெட்ரோல் இல்லாமல் ஓடுகின்றன. மருத்துவமனைகளில் ரோபோட்கள் அறுவை சிகிச்சைகளில் மருத்தவர்களுக்கு உதவுகின்றன. ட்ரோன்கள் பறந்து புகைப்படம் எடுக்க அல்லது பொருட்கள் அனுப்ப பயன்படுகின்றன.
     </p>
 
-    <button onclick="startRecognition()">🎙 Start Speaking</button>
-    <textarea id="userInput" placeholder="Your speech will appear here..."></textarea>
+    <button onclick="startRecognition()">🎙 தொடங்கவும்</button>
+    <textarea id="userInput" placeholder="உங்கள் குரல் இங்கே தோன்றும்..."></textarea>
 
-    <button onclick="stopTimer()">⏹ Stop Timer</button>
-    <button onclick="checkAccuracy()">✅ Check Accuracy</button>
+    <button onclick="stopTimer()">⏹ நேரத்தை நிறுத்து</button>
+    <button onclick="checkAccuracy()">✅ துல்லியத்தை சரிபார்</button>
 
     <p id="result"></p>
   </div>
@@ -156,7 +156,7 @@
       recognition = new webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = 'en-US';
+      recognition.lang = 'ta-IN';
 
       recognition.onstart = function() {
         startTimer();
@@ -168,10 +168,10 @@
       };
 
       recognition.onerror = function(event) {
-        alert("Oops! Something went wrong: " + event.error);
+        alert("பிழை: " + event.error);
       };
     } else {
-      alert("Sorry, your browser doesn't support Speech Recognition.");
+      alert("மன்னிக்கவும், உங்களுடைய உலாவி இந்த வசதியை ஆதரிக்கவில்லை.");
     }
 
     function startRecognition() {
@@ -180,12 +180,12 @@
 
     function startTimer() {
       startTime = new Date().getTime();
-      document.getElementById("result").innerText = "⏱ Timer started. Start reading!";
+      document.getElementById("result").innerText = "⏱ நேரம் துவங்கியது! வாசிக்கவும்...";
     }
 
     function stopTimer() {
       endTime = new Date().getTime();
-      document.getElementById("result").innerText = "🛑 Timer stopped. Now check your results!";
+      document.getElementById("result").innerText = "🛑 நேரம் நிறைந்தது. இப்போது முடிவுகளை பாருங்கள்!";
     }
 
     function checkAccuracy() {
@@ -202,9 +202,9 @@
       const wpm = ((user.length / durationInSeconds) * 60).toFixed(2);
 
       document.getElementById("result").innerHTML = `
-        🎯 <strong>Accuracy:</strong> ${accuracy}%<br>
-        🚀 <strong>Speed:</strong> ${wpm} words per minute<br>
-        📝 <strong>Matched Words:</strong> ${matchCount} / ${original.length}
+        🎯 <strong>துல்லியம்:</strong> ${accuracy}%<br>
+        🚀 <strong>வேகம்:</strong> ${wpm} வார்த்தைகள் / நிமிடம்<br>
+        📝 <strong>பொருந்திய வார்த்தைகள்:</strong> ${matchCount} / ${original.length}
       `;
     }
 
@@ -213,9 +213,9 @@
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen(); // Safari
+        elem.webkitRequestFullscreen();
       } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen(); // IE11
+        elem.msRequestFullscreen();
       }
     }
 
