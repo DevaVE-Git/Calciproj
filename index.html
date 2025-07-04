@@ -81,6 +81,8 @@
   <div class="container">
     <h2>📚 Fun Reading Speed Game!</h2>
 
+    <button onclick="goFullscreen()">🖥 Go Fullscreen</button>
+
     <p><strong>🎤 Read this aloud:</strong></p>
     <p id="originalText">
       Today, science is growing fast with smart and new ideas. Solar panels now turn sunlight into power for homes and cars. Electric vehicles help reduce air pollution and run without petrol. Robots are used in hospitals to help doctors during surgeries. Drones can fly and take photos or deliver packages.
@@ -154,6 +156,17 @@
         🚀 <strong>Speed:</strong> ${wpm} words per minute<br>
         📝 <strong>Matched Words:</strong> ${matchCount} / ${original.length}
       `;
+    }
+
+    function goFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen(); // Safari
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen(); // IE11
+      }
     }
   </script>
 </body>
