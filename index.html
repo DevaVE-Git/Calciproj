@@ -2,32 +2,68 @@
 <html lang="ta">
 <head>
   <meta charset="UTF-8">
-  <title>📚 வாசிப்பு வேகம்</title>
+  <title>📖 வேக வாசிப்பு விளையாட்டு</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
+    * { box-sizing: border-box; }
+
+    body, html {
       margin: 0;
       padding: 0;
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #7f00ff, #e100ff);
       min-height: 100vh;
-      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #fullscreenPrompt {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #7f00ff, #e100ff);
+      color: #fff;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
+      z-index: 9999;
+      font-size: 2rem;
+      padding: 20px;
+      cursor: pointer;
+    }
+
+    #fullscreenPrompt span {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin-top: 15px;
     }
 
     .container {
-      width: 90%;
+      display: none;
       max-width: 800px;
+      margin: 60px auto;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(12px);
       border-radius: 20px;
       padding: 40px;
       color: #fff;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      animation: fadeIn 1.5s ease;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #timer {
+      font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: bold;
     }
 
     h2 {
@@ -45,7 +81,6 @@
       font-size: 1.1rem;
       line-height: 1.6;
       border-left: 6px solid #ffffff70;
-      animation: slideInUp 1s ease;
     }
 
     textarea {
@@ -92,57 +127,53 @@
       border-radius: 12px;
       color: #e0ffe0;
       border-left: 4px solid #32cd32;
-      animation: fadeInUp 1s ease;
     }
 
-    #overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-size: 1.8rem;
-      text-align: center;
-      cursor: pointer;
-      z-index: 1000;
-      padding: 20px;
+    .legend {
+      margin-top: 15px;
+      font-size: 0.9rem;
     }
 
-    .sticker {
-      font-size: 2rem;
-      animation: bounce 2s infinite;
+    .correct-word {
+      color: #00ff88;
+      font-weight: bold;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .wrong-word {
+      color: #ff4444;
+      font-weight: bold;
     }
   </style>
 </head>
-<body onclick="goFullscreen()" onkeydown="goFullscreen()">
-  <div id="overlay" onclick="startExperience()">
-    👆 <span class="sticker">📣</span><br>
-    தொடுங்கள்! உங்கள் வாசிப்பு வேக விளையாட்டை தொடங்குங்கள்<br>
-    <span class="sticker">✨🎤📖</span>
+<body>
+
+  <div id="fullscreenPrompt" onclick="enterFullscreen()">
+    👉 தொடததவோ அல்லது கிளிக் செய் - முழுத்திரை அனுபவம்  
+    <span>(முழுத்திரை பயன்முறை சிறந்தது)</span>
   </div>
 
-  <div class="container animate__animated animate__fadeInDown">
-    <h2>📚 வாசிப்பு வேக சோதனை <span class="sticker">⚡</span></h2>
+  <div class="container" id="mainContainer">
+    <div class="header-row">
+      <div id="timer">⏳ நேரம்: 10 வினாடி</div>
+    </div>
 
-    <p><strong>🎤 இதை ஒலியாக வாசிக்கவும்:</strong></p>
+    <h2>🚀 வேக வாசிப்பு விளையாட்டு <span>🧠</span></h2>
+
+    <p><strong>🎤 இதை சத்தமாக வாசிக்கவும்:</strong></p>
     <p id="originalText">
-      இன்று அறிவியல் வேகமாக வளர்ந்து வருகிறது. சூரிய பலகைகள் சூரிய ஒளியை மின்சக்தியாக மாற்றுகின்றன. மின்சார வாகனங்கள் மாசுபாட்டைக் குறைத்து பெட்ரோல் இல்லாமல் ஓடுகின்றன. மருத்துவமனைகளில் ரோபோட்கள் அறுவை சிகிச்சைகளில் மருத்தவர்களுக்கு உதவுகின்றன. ட்ரோன்கள் பறந்து புகைப்படம் எடுக்க அல்லது பொருட்கள் அனுப்ப பயன்படுகின்றன.
+      இன்று அறிவியல் வேகமாக வளர்ந்து வருகிறது. சூரிய ஒளியை மின்சாரமாக மாற்ற சோலார் பேனல்கள் பயன்படுத்தப்படுகின்றன. மின்சார வாகனங்கள் மாசை குறைக்க உதவுகின்றன. மருத்துவமனைகளில் ரோபோட்டுகள் அறுவை சிகிச்சைக்கு உதவுகின்றன. ட்ரோன்கள் புகைப்படம் எடுக்கவும் பார்சல்கள் அனுப்பவும் பயன்படுத்தப்படுகின்றன.
     </p>
 
-    <button onclick="startRecognition()">🎙 தொடங்கவும்</button>
-    <textarea id="userInput" placeholder="உங்கள் குரல் இங்கே தோன்றும்..."></textarea>
+    <button onclick="startRecognition()">🎙 பேச துவங்கு</button>
+    <textarea id="userInput" placeholder="உங்கள் பேச்சு இங்கே தோன்றும்..."></textarea>
 
-    <button onclick="stopTimer()">⏹ நேரத்தை நிறுத்து</button>
-    <button onclick="checkAccuracy()">✅ துல்லியத்தை சரிபார்</button>
+    <button onclick="stopTimer()">⏹ நேரம் நிறுத்து</button>
+    <button onclick="checkAccuracy()">✅ துல்லியத்தைக் காண்க</button>
+
+    <div class="legend">
+      ✅ <span class="correct-word">பச்சை</span>: சரியானது &nbsp;&nbsp;
+      ❌ <span class="wrong-word">சிவப்பு</span>: தவறு அல்லது தவற விட்டது
+    </div>
 
     <p id="result"></p>
   </div>
@@ -151,64 +182,10 @@
     let recognition;
     let startTime = 0;
     let endTime = 0;
+    let countdownInterval;
+    let timeLeft = 10;
 
-    if ('webkitSpeechRecognition' in window) {
-      recognition = new webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'ta-IN';
-
-      recognition.onstart = function() {
-        startTimer();
-      };
-
-      recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("userInput").value = transcript;
-      };
-
-      recognition.onerror = function(event) {
-        alert("பிழை: " + event.error);
-      };
-    } else {
-      alert("மன்னிக்கவும், உங்களுடைய உலாவி இந்த வசதியை ஆதரிக்கவில்லை.");
-    }
-
-    function startRecognition() {
-      recognition.start();
-    }
-
-    function startTimer() {
-      startTime = new Date().getTime();
-      document.getElementById("result").innerText = "⏱ நேரம் துவங்கியது! வாசிக்கவும்...";
-    }
-
-    function stopTimer() {
-      endTime = new Date().getTime();
-      document.getElementById("result").innerText = "🛑 நேரம் நிறைந்தது. இப்போது முடிவுகளை பாருங்கள்!";
-    }
-
-    function checkAccuracy() {
-      const original = document.getElementById("originalText").innerText.toLowerCase().replace(/[.,]/g, "").split(" ");
-      const user = document.getElementById("userInput").value.toLowerCase().replace(/[.,]/g, "").split(" ");
-
-      let matchCount = 0;
-      original.forEach((word, index) => {
-        if (user[index] === word) matchCount++;
-      });
-
-      const accuracy = ((matchCount / original.length) * 100).toFixed(2);
-      const durationInSeconds = (endTime - startTime) / 1000;
-      const wpm = ((user.length / durationInSeconds) * 60).toFixed(2);
-
-      document.getElementById("result").innerHTML = `
-        🎯 <strong>துல்லியம்:</strong> ${accuracy}%<br>
-        🚀 <strong>வேகம்:</strong> ${wpm} வார்த்தைகள் / நிமிடம்<br>
-        📝 <strong>பொருந்திய வார்த்தைகள்:</strong> ${matchCount} / ${original.length}
-      `;
-    }
-
-    function goFullscreen() {
+    function enterFullscreen() {
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
@@ -217,11 +194,96 @@
       } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
       }
+
+      document.getElementById('fullscreenPrompt').style.display = 'none';
+      document.getElementById('mainContainer').style.display = 'block';
     }
 
-    function startExperience() {
-      goFullscreen();
-      document.getElementById("overlay").style.display = "none";
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'ta-IN';
+
+      recognition.onstart = function () {
+        startTimer();
+      };
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+      };
+
+      recognition.onerror = function (event) {
+        alert("பிழை ஏற்பட்டது: " + event.error);
+      };
+    } else {
+      alert("உங்கள் உலாவி பேச்சு அங்கீகாரத்தை ஆதரிக்கவில்லை.");
+    }
+
+    function startRecognition() {
+      recognition.start();
+    }
+
+    function startTimer() {
+      startTime = new Date().getTime();
+      timeLeft = 10;
+      document.getElementById("result").innerText = "⏱ நேரம் தொடங்கியது! வாசிக்க தொடங்குங்கள்!";
+      updateTimerDisplay();
+
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          endTime = new Date().getTime();
+          document.getElementById("result").innerText = "⏰ நேரம் முடிந்தது! துல்லியம் பாருங்கள்.";
+          recognition.stop();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(countdownInterval);
+      endTime = new Date().getTime();
+      document.getElementById("result").innerText = "🛑 நேரம் நிறுத்தப்பட்டது! துல்லியம் பாருங்கள்!";
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById("timer").innerText = `⏳ நேரம்: ${timeLeft} வினாடி`;
+    }
+
+    function checkAccuracy() {
+      const originalText = document.getElementById("originalText").innerText;
+      const original = originalText.toLowerCase().replace(/[.,]/g, "").split(" ");
+      const user = document.getElementById("userInput").value.toLowerCase().replace(/[.,]/g, "").split(" ");
+
+      let matchCount = 0;
+      let visualOutput = "";
+
+      for (let i = 0; i < original.length; i++) {
+        if (user[i] === original[i]) {
+          visualOutput += `<span class="correct-word">${original[i]}</span> `;
+          matchCount++;
+        } else {
+          visualOutput += `<span class="wrong-word">${original[i]}</span> `;
+        }
+      }
+
+      const accuracy = ((matchCount / original.length) * 100).toFixed(2);
+      const durationInSeconds = (endTime - startTime) / 1000;
+      const wpm = ((user.length / durationInSeconds) * 60).toFixed(2);
+
+      document.getElementById("result").innerHTML = `
+        🎯 <strong>துல்லியம்:</strong> ${accuracy}%<br>
+        🚀 <strong>வேகம்:</strong> ${wpm} வார்த்தைகள் / நிமிடம்<br>
+        📝 <strong>பொருந்திய வார்த்தைகள்:</strong> ${matchCount} / ${original.length}<br><br>
+        <strong>ஒப்பீடு:</strong><br>
+        <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 10px; margin-top: 10px;">
+          ${visualOutput.trim()}
+        </div>
+      `;
     }
   </script>
 </body>
