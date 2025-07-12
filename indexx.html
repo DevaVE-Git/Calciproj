@@ -33,12 +33,6 @@
       cursor: pointer;
     }
 
-    #fullscreenPrompt span {
-      font-size: 1.2rem;
-      opacity: 0.8;
-      margin-top: 15px;
-    }
-
     .container {
       display: none;
       max-width: 800px;
@@ -51,21 +45,6 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #timer {
-      font-size: 1.2rem;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 10px 20px;
-      border-radius: 10px;
-      color: #fff;
-      font-weight: bold;
-    }
-
     h2 {
       text-align: center;
       font-size: 2.5rem;
@@ -74,44 +53,34 @@
       text-shadow: 0 0 10px #ffd6ff;
     }
 
-    p#originalText {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      border-left: 6px solid #ffffff70;
+    #timer {
+      font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #fff;
     }
 
-    textarea {
+    select, button, textarea {
       width: 100%;
-      height: 120px;
-      margin-top: 20px;
+      margin-top: 15px;
       font-size: 1rem;
-      padding: 10px;
       border-radius: 10px;
       border: none;
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff;
-      resize: none;
+      padding: 12px;
     }
 
-    textarea::placeholder {
-      color: #ddd;
+    select {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
     }
 
     button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      margin-top: 20px;
-      margin-right: 10px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
       background: linear-gradient(90deg, #a100f2, #ff69b4);
       color: white;
+      cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.3s;
     }
 
     button:hover {
@@ -119,19 +88,23 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
-    #result {
-      margin-top: 25px;
-      font-size: 1rem;
-      padding: 15px;
+    textarea {
+      height: 120px;
       background: rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      color: #e0ffe0;
-      border-left: 4px solid #32cd32;
+      color: #fff;
+      resize: none;
     }
 
-    .legend {
-      margin-top: 15px;
-      font-size: 0.9rem;
+    #originalText {
+      margin-top: 10px;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .legend, #result {
+      margin-top: 20px;
+      font-size: 0.95rem;
     }
 
     .correct-word {
@@ -143,6 +116,44 @@
       color: #ff4444;
       font-weight: bold;
     }
+
+    #progressBarContainer {
+      height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    #progressBar {
+      height: 100%;
+      background: #00ff88;
+      width: 100%;
+      transition: width 15s linear;
+    }
+
+    #countdownOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    #countdownText {
+      font-size: 6rem;
+      color: white;
+      font-weight: bold;
+      animation: pop 1s ease-in-out;
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(0.2); opacity: 0; }
+      50%  { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -152,19 +163,27 @@
     <span>(Recommended for best experience)</span>
   </div>
 
+  <div id="countdownOverlay">
+    <div id="countdownText">3</div>
+  </div>
+
   <div class="container" id="mainContainer">
-    <div class="header-row">
-      <div id="timer">⏳ Timer: 10s</div>
-    </div>
+    <h2>🎯 Fun Reading Speed Game</h2>
+    <div id="timer">⏳ Timer: 15s</div>
 
-    <h2>🚀 Fun Reading Speed Game <span>🧠</span></h2>
+    <select id="paragraphSelector" onchange="changeParagraph()">
+      <option value="science">🚀 Modern Science</option>
+      <option value="ronaldo">⚽ Cristiano Ronaldo</option>
+      <option value="space">🪐 Space Exploration</option>
+      <option value="climate">🌍 Climate Change</option>
+    </select>
 
-    <p><strong>🎤 Read this aloud:</strong></p>
     <p id="originalText">
       Today, science is growing fast with smart and new ideas. Solar panels now turn sunlight into power for homes and cars. Electric vehicles help reduce air pollution and run without petrol. Robots are used in hospitals to help doctors during surgeries. Drones can fly and take photos or deliver packages.
     </p>
 
-    <button onclick="startRecognition()">🎙 Start Speaking</button>
+    <button id="startBtn" onclick="startRecognition()">🎙 Start Speaking</button>
+    <div id="progressBarContainer"><div id="progressBar"></div></div>
     <textarea id="userInput" placeholder="Your speech will appear here..."></textarea>
 
     <button onclick="stopTimer()">⏹ Stop Timer</button>
@@ -178,68 +197,120 @@
     <p id="result"></p>
   </div>
 
+  <!-- SOUND EFFECTS -->
+  <audio id="beepSound" src="beep.mp3" preload="auto"></audio>
+  <audio id="goSound" src="go.mp3" preload="auto"></audio>
+
   <script>
     let recognition;
-    let startTime = 0;
-    let endTime = 0;
+    let timeLeft = 15;
     let countdownInterval;
-    let timeLeft = 10;
+    let startTime, endTime;
+
+    const beep = document.getElementById("beepSound");
+    const go = document.getElementById("goSound");
 
     function enterFullscreen() {
       const elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
-      }
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
 
-      document.getElementById('fullscreenPrompt').style.display = 'none';
-      document.getElementById('mainContainer').style.display = 'block';
+      document.getElementById("fullscreenPrompt").style.display = "none";
+      document.getElementById("mainContainer").style.display = "block";
     }
 
-    if ('webkitSpeechRecognition' in window) {
-      recognition = new webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = function () {
-        startTimer();
+    function changeParagraph() {
+      const val = document.getElementById("paragraphSelector").value;
+      const text = {
+        science: "Today, science is growing fast with smart and new ideas. Solar panels now turn sunlight into power for homes and cars. Electric vehicles help reduce air pollution and run without petrol. Robots are used in hospitals to help doctors during surgeries. Drones can fly and take photos or deliver packages.",
+        ronaldo: "Cristiano Ronaldo is one of the greatest footballers in history. Known for his speed, strength, and incredible goal-scoring skills, he has won many trophies with clubs like Manchester United, Real Madrid, and Juventus. Ronaldo's dedication to training and fitness is admired by millions around the world.",
+        space: "Space exploration has led to amazing discoveries about our universe. Astronauts travel in rockets to study planets, stars, and galaxies. Satellites help us understand weather and connect people across the globe. The dream of visiting Mars is now becoming a goal for future missions.",
+        climate: "Climate change is a serious global issue affecting nature and human life. Rising temperatures are causing glaciers to melt and sea levels to rise. Many animals are losing their natural habitats. It's important to use clean energy, plant trees, and protect the environment for a better future."
       };
-
-      recognition.onresult = function (event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("userInput").value = transcript;
-      };
-
-      recognition.onerror = function (event) {
-        alert("Oops! Something went wrong: " + event.error);
-      };
-    } else {
-      alert("Sorry, your browser doesn't support Speech Recognition.");
+      document.getElementById("originalText").innerText = text[val];
     }
 
     function startRecognition() {
+      showCountdown(3);
+    }
+
+    function showCountdown(startNum) {
+      const overlay = document.getElementById("countdownOverlay");
+      const text = document.getElementById("countdownText");
+      let count = startNum;
+
+      overlay.style.display = "flex";
+      text.innerText = count;
+      beep.play();
+
+      let countdown = setInterval(() => {
+        count--;
+        if (count > 0) {
+          text.innerText = count;
+          beep.play();
+        } else if (count === 0) {
+          text.innerText = "Go!";
+          go.play();
+        } else {
+          clearInterval(countdown);
+          overlay.style.display = "none";
+          beginGame();
+        }
+      }, 1000);
+    }
+
+    function beginGame() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Speech Recognition not supported");
+        return;
+      }
+
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      recognition.onresult = (event) => {
+        document.getElementById("userInput").value = event.results[0][0].transcript;
+      };
+
+      recognition.onend = () => resetStartButton();
+
       recognition.start();
+      startTimer();
+
+      const btn = document.getElementById("startBtn");
+      btn.textContent = "🎤 Listening...";
+      btn.style.background = "#333";
+      btn.disabled = true;
+    }
+
+    function resetStartButton() {
+      const btn = document.getElementById("startBtn");
+      btn.textContent = "🎙 Start Speaking";
+      btn.style.background = "linear-gradient(90deg, #a100f2, #ff69b4)";
+      btn.disabled = false;
+      document.getElementById("progressBar").style.width = "0%";
     }
 
     function startTimer() {
       startTime = new Date().getTime();
-      timeLeft = 10;
-      document.getElementById("result").innerText = "⏱ Timer started. Start reading!";
-      updateTimerDisplay();
+      timeLeft = 15;
+      document.getElementById("timer").innerText = `⏳ Timer: ${timeLeft}s`;
+
+      const progress = document.getElementById("progressBar");
+      progress.style.transition = "width 15s linear";
+      progress.style.width = "0%";
 
       countdownInterval = setInterval(() => {
         timeLeft--;
-        updateTimerDisplay();
-
+        document.getElementById("timer").innerText = `⏳ Timer: ${timeLeft}s`;
         if (timeLeft <= 0) {
           clearInterval(countdownInterval);
           endTime = new Date().getTime();
-          document.getElementById("result").innerText = "⏰ Time's up! Now check your accuracy.";
-          recognition.stop(); // Stop recognition too
+          recognition.stop();
+          document.getElementById("timer").innerText = "⏰ Time's up!";
         }
       }, 1000);
     }
@@ -247,42 +318,35 @@
     function stopTimer() {
       clearInterval(countdownInterval);
       endTime = new Date().getTime();
-      document.getElementById("result").innerText = "🛑 Timer stopped. Now check your results!";
-    }
-
-    function updateTimerDisplay() {
-      document.getElementById("timer").innerText = `⏳ Timer: ${timeLeft}s`;
+      recognition?.stop();
+      document.getElementById("timer").innerText = "🛑 Timer stopped.";
+      resetStartButton();
     }
 
     function checkAccuracy() {
-      const originalText = document.getElementById("originalText").innerText;
-      const original = originalText.toLowerCase().replace(/[.,]/g, "").split(" ");
-      const user = document.getElementById("userInput").value.toLowerCase().replace(/[.,]/g, "").split(" ");
-
-      let matchCount = 0;
-      let visualOutput = "";
+      const original = document.getElementById("originalText").innerText.toLowerCase().replace(/[.,]/g, "").split(" ");
+      const spoken = document.getElementById("userInput").value.toLowerCase().replace(/[.,]/g, "").split(" ");
+      let match = 0, resultHTML = "";
 
       for (let i = 0; i < original.length; i++) {
-        if (user[i] === original[i]) {
-          visualOutput += `<span class="correct-word">${original[i]}</span> `;
-          matchCount++;
+        if (spoken[i] === original[i]) {
+          resultHTML += `<span class="correct-word">${original[i]}</span> `;
+          match++;
         } else {
-          visualOutput += `<span class="wrong-word">${original[i]}</span> `;
+          resultHTML += `<span class="wrong-word">${original[i]}</span> `;
         }
       }
 
-      const accuracy = ((matchCount / original.length) * 100).toFixed(2);
-      const durationInSeconds = (endTime - startTime) / 1000;
-      const wpm = ((user.length / durationInSeconds) * 60).toFixed(2);
+      const accuracy = ((match / original.length) * 100).toFixed(2);
+      const duration = (endTime - startTime) / 1000 || 1;
+      const wpm = ((spoken.length / duration) * 60).toFixed(2);
 
       document.getElementById("result").innerHTML = `
         🎯 <strong>Accuracy:</strong> ${accuracy}%<br>
-        🚀 <strong>Speed:</strong> ${wpm} words per minute<br>
-        📝 <strong>Matched Words:</strong> ${matchCount} / ${original.length}<br><br>
-        <strong>Visual Comparison:</strong><br>
-        <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 10px; margin-top: 10px;">
-          ${visualOutput.trim()}
-        </div>
+        🚀 <strong>Speed:</strong> ${wpm} words/min<br>
+        📝 <strong>Matched:</strong> ${match} / ${original.length}<br><br>
+        <strong>Comparison:</strong><br>
+        <div style="margin-top:10px;">${resultHTML}</div>
       `;
     }
   </script>
